@@ -29,4 +29,13 @@ contract ZombieFactory {
 
         emit ZombieCreated(id, msg.sender, name, dna);
     }
+
+    function totalZombies() external view returns (uint256) {
+        return zombies.length;
+    }
+
+    function getZombie(uint256 id) external view returns (string memory, uint256, uint256) {
+        Zombie storage zombie = zombies[id];
+        return (zombie.name, zombie.dna, zombie.createdAt);
+    }
 }
