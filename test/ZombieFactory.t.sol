@@ -46,4 +46,12 @@ contract ZombieFactoryTest is Test {
         vm.expectRevert(bytes("Empty name"));
         factory.createZombie("");
     }
+
+    function testRevertsOnSecondZombieForSameOwner() public {
+        vm.startPrank(alice);
+        factory.createZombie("Alice");
+        vm.expectRevert(bytes("Already has zombie"));
+        factory.createZombie("Alice 2");
+        vm.stopPrank();
+    }
 }
