@@ -17,6 +17,9 @@ contract ZombieFactory {
     event ZombieCreated(uint256 indexed id, address indexed owner, string name, uint256 dna);
 
     function createZombie(string calldata name) external returns (uint256 id) {
+        require(bytes(name).length > 0, "Empty name");
+        require(ownerZombieCount[msg.sender] == 0, "Already has zombie");
+
         uint256 dna = uint256(keccak256(abi.encodePacked(msg.sender, name))) % DNA_MODULUS;
 
         id = zombies.length;
