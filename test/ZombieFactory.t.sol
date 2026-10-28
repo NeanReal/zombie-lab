@@ -54,4 +54,12 @@ contract ZombieFactoryTest is Test {
         factory.createZombie("Alice 2");
         vm.stopPrank();
     }
+
+    function testDnaIsBelowModulus() public {
+        vm.prank(alice);
+        uint256 id = factory.createZombie("Alice");
+
+        (, uint256 dna,) = factory.getZombie(id);
+        assertLt(dna, factory.DNA_MODULUS());
+    }
 }
