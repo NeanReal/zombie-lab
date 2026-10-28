@@ -15,4 +15,15 @@ contract ZombieFactory {
     mapping(address => uint256) public ownerZombieCount;
 
     event ZombieCreated(uint256 indexed id, address indexed owner, string name, uint256 dna);
+
+    function createZombie(string calldata name) external returns (uint256 id) {
+        uint256 dna = uint256(keccak256(abi.encodePacked(msg.sender, name))) % DNA_MODULUS;
+
+        id = zombies.length;
+        zombies.push(Zombie(name, dna, block.timestamp));
+        zombieToOwner[id] = msg.sender;
+        ownerZombieCount[msg.sender]++;
+
+        emit ZombieCreated(id, msg.sender, name, dna);
+    }
 }
