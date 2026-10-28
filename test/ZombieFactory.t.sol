@@ -40,4 +40,10 @@ contract ZombieFactoryTest is Test {
         assertEq(factory.zombieToOwner(bobId), bob);
         assertEq(factory.totalZombies(), 2);
     }
+
+    function testRevertsOnEmptyName() public {
+        vm.prank(alice);
+        vm.expectRevert(bytes("Empty name"));
+        factory.createZombie("");
+    }
 }
