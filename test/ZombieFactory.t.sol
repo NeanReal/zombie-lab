@@ -7,6 +7,7 @@ import {ZombieFactory} from "../src/ZombieFactory.sol";
 contract ZombieFactoryTest is Test {
     ZombieFactory factory;
     address alice = address(0xA11CE);
+    address bob = address(0xB0B);
 
     function setUp() public {
         factory = new ZombieFactory();
@@ -25,5 +26,18 @@ contract ZombieFactoryTest is Test {
         assertEq(createdAt, 1_700_000_000);
         assertEq(factory.totalZombies(), 1);
         assertEq(factory.ownerZombieCount(alice), 1);
+    }
+
+    function testTwoOwnersCreateSeparateZombies() public {
+        vm.prank(alice);
+        uint256 aliceId = factory.createZombie("Alice");
+        vm.prank(bob);
+        uint256 bobId = factory.createZombie("Bob");
+
+        assertEq(aliceId, 0);
+        assertEq(bobId, 1);
+        assertEq(factory.zombieToOwner(aliceId), alice);
+        assertEq(factory.zombieToOwner(bobId), bob);
+        assertEq(factory.totalZombies(), 2);
     }
 }
